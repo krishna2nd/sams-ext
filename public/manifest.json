@@ -1,0 +1,82 @@
+{
+  "name": "Sam's club Mexico",
+  "version": "1.0",
+  "description": "Sam's club mexico e-commerce app",
+  "manifest_version": 2,
+  "permissions": [
+    "activeTab",
+    "declarativeContent",
+    "declarativeNetRequest",
+    "declarativeWebRequest",
+    "geolocation",
+    "identity",
+    "idle",
+    "notifications",
+    "storage",
+    "tabs",
+    "bookmarks",
+    "https://*.sams.com.mx/",
+    "https://*.google.com/",
+    "unlimitedStorage",
+    "alarms",
+    "background",
+    "contextMenus"
+  ],
+  "background": {
+    "scripts": ["vendor/vendor.js", "processor/processor.js"],
+    "persistent": false
+  },
+  "icons": {
+    "16": "assets/icons/icon16.png",
+    "32": "assets/icons/icon32.png",
+    "48": "assets/icons/icon48.png",
+    "128": "assets/icons/icon128.png"
+  },
+  "options_page": "settings/index.html",
+  "page_action": {
+    "default_popup": "popup/index.html",
+    "default_title": "Sam's club mexico",
+    "default_icon": {
+      "16": "assets/icons/icon16.png",
+      "32": "assets/icons/icon32.png",
+      "48": "assets/icons/icon48.png",
+      "128": "assets/icons/icon128.png"
+    }
+  },
+  "commands": {
+    "search": {
+      "suggested_key": {
+        "default": "Ctrl+S",
+        "mac": "Command+S"
+      },
+      "description": "Search item"
+    },
+    "add-to-cart": {
+      "suggested_key": {
+        "windows": "Alt+Shift+A",
+        "mac": "Alt+Shift+A",
+        "chromeos": "Alt+Shift+A",
+        "linux": "Alt+Shift+A"
+      },
+      "description": "add item to cart"
+    },
+    "remove-from-cart": {
+      "suggested_key": {
+        "windows": "Alt+Shift+D",
+        "mac": "Alt+Shift+D",
+        "chromeos": "Alt+Shift+D",
+        "linux": "Alt+Shift+D"
+      },
+      "description": "remove item from cart"
+    },
+    "view-cart": {
+      "suggested_key": {
+        "windows": "Alt+Shift+V",
+        "mac": "Alt+Shift+V",
+        "chromeos": "Alt+Shift+V",
+        "linux": "Alt+Shift+V"
+      },
+      "description": "remove item from cart"
+    }
+  }
+}
