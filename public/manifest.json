@@ -15,13 +15,19 @@
     "storage",
     "tabs",
     "bookmarks",
-    "https://*.sams.com.mx/",
-    "https://*.google.com/",
+    "\u003Call_urls>",
     "unlimitedStorage",
     "alarms",
     "background",
-    "contextMenus"
+    "contextMenus",
+    "http://*/",
+    "https://*/"
   ],
+  "content_security_policy": "script-src 'unsafe-inline' 'self' https://maps.googleapis.com; object-src 'self';",
+  "externally_connectable": {
+    "matches": ["*://*.sams.com.mx/*"]
+  },
+  "offline_enabled": true,
   "background": {
     "scripts": ["vendor/vendor.js", "processor/processor.js"],
     "persistent": false
@@ -33,6 +39,10 @@
     "128": "assets/icons/icon128.png"
   },
   "options_page": "settings/index.html",
+  "options_ui": {
+    "chrome_style": true,
+    "page": "settings/index.html"
+  },
   "page_action": {
     "default_popup": "popup/index.html",
     "default_title": "Sam's club mexico",
@@ -43,6 +53,7 @@
       "128": "assets/icons/icon128.png"
     }
   },
+  
   "commands": {
     "search": {
       "suggested_key": {
