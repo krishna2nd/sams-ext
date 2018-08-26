@@ -23,7 +23,7 @@
     "http://*/",
     "https://*/"
   ],
-  "content_security_policy": "script-src 'unsafe-inline' 'self' https://maps.googleapis.com; object-src 'self';",
+  "content_security_policy": "script-src 'unsafe-inline' 'unsafe-eval' 'self' https://maps.googleapis.com; object-src 'self';",
   "externally_connectable": {
     "matches": ["*://*.sams.com.mx/*"]
   },
