@@ -10,6 +10,13 @@ class App extends Component {
     });
     fetch('https://www.sams.com.mx/sams/home/?format=json')
       .then(response => {
+        var port = chrome.extension.connect({
+          name: "Sample Communication"
+     });
+     port.postMessage("Hi BackGround");
+     port.onMessage.addListener(function(msg) {
+          console.log("message recieved" + msg);
+     })
         return response.json();
       })
       .then(console.log)
@@ -18,7 +25,12 @@ class App extends Component {
       });
   }
   render() {
-    return <div />;
+    return <div >
+      <a onClick={e => { chrome.tabs.create({
+		url: chrome.extension.getURL('application/index.html'),
+		selected: true
+	}); }} >Click to application</a>
+    </div>;
   }
 }
 

@@ -58,7 +58,8 @@ module.exports = {
   // In production, we only want to load the polyfills and the app code.
   entry: {
     vendor: ['react', 'react-dom', 'react-onsenui', 'onsenui'],
-    popup: [require.resolve('./polyfills'), paths.appIndexJs],
+    application: [require.resolve('./polyfills'), paths.appIndexJs],
+    popup: [require.resolve('./polyfills'), paths.popupIndexJs],
     settings: [require.resolve('./polyfills'), paths.appSettingsIndexJs],
     processor: [paths.appProcessIndexJs],
   },
@@ -280,6 +281,24 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       inject: true,
+      template: paths.appHtml,
+      filename: 'application/index.html',
+      chunks: ['vendor', 'application'],
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeRedundantAttributes: true,
+        useShortDoctype: true,
+        removeEmptyAttributes: true,
+        removeStyleLinkTypeAttributes: true,
+        keepClosingSlash: true,
+        minifyJS: true,
+        minifyCSS: true,
+        minifyURLs: true,
+      },
+    }),
+    new HtmlWebpackPlugin({
+      inject: true,
       template: paths.appSettingsHtml,
       filename: 'settings/index.html',
       chunks: ['vendor', 'settings'],
@@ -301,6 +320,13 @@ module.exports = {
     // It is absolutely essential that NODE_ENV was set to production here.
     // Otherwise React will be compiled in the very slow development mode.
     new webpack.DefinePlugin(env.stringified),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('development'),
+      __DEVELOPMENT__: true,
+      __DEVTOOLS__: false,
+      __USE_GA__: false,
+      __GA_ID__: null
+    }),
     // Minify the code.
     // new webpack.optimize.UglifyJsPlugin({
     //   compress: {
@@ -349,3 +375,5 @@ module.exports = {
     child_process: 'empty',
   },
 };
+
+console.log(env.stringified)

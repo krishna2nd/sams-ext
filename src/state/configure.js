@@ -6,16 +6,15 @@ import thunk from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
 import { routerMiddleware } from 'react-router-redux';
 import DevTools from './devTools';
-import { socketIoMiddleware } from 'middlewares/socketio';
-import reducers from 'modules/state';
-import sagas from 'modules/sagas';
+
+import reducers from './initialState';
+import sagas from './user';
 
 export default function configureStore(initialState = {}, browserHistory) {
   const middlewares = [];
   const sagaMiddleware = createSagaMiddleware();
   middlewares.push(thunk);
   middlewares.push(routerMiddleware(browserHistory));
-  middlewares.push(socketIoMiddleware);
   middlewares.push(sagaMiddleware);
 
   if (__DEVELOPMENT__) {
@@ -27,7 +26,7 @@ export default function configureStore(initialState = {}, browserHistory) {
   }
 
   if (__USE_GA__) {
-    const { googleAnalyticsMiddleware } = require('../middlewares/ga');
+    const { googleAnalyticsMiddleware } = require('./middlewares/ga');
     middlewares.push(googleAnalyticsMiddleware);
   }
 
