@@ -8,7 +8,7 @@ import { routerMiddleware } from 'react-router-redux';
 import DevTools from './devTools';
 
 import reducers from './initialState';
-import sagas from './user';
+import sagas from './sagas';
 
 export default function configureStore(initialState = {}, browserHistory) {
   const middlewares = [];
