@@ -32,9 +32,9 @@ module.exports = {
   // These are the "entry points" to our application.
   // This means they will be the "root" imports that are included in JS bundle.
   // The first two entry points enable "hot" CSS and auto-refreshes for JS.
-  entry: [
+  entry: {
     // We ship a few polyfills by default:
-    require.resolve('./polyfills'),
+    // require.resolve('./polyfills'),
     // Include an alternative client for WebpackDevServer. A client's job is to
     // connect to WebpackDevServer by a socket and get notified about changes.
     // When you save a file, the client will either apply hot updates (in case
@@ -45,22 +45,27 @@ module.exports = {
     // the line below with these two lines if you prefer the stock client:
     // require.resolve('webpack-dev-server/client') + '?/',
     // require.resolve('webpack/hot/dev-server'),
-    require.resolve('react-dev-utils/webpackHotDevClient'),
+    // require.resolve('react-dev-utils/webpackHotDevClient'),
     // Finally, this is your app's code:
-    paths.appIndexJs,
+      vendor: ['react', 'react-dom', 'react-onsenui', 'onsenui'],
+      application: [require.resolve('./polyfills'), paths.appIndexJs, require.resolve('react-dev-utils/webpackHotDevClient')],
+      popup: [require.resolve('./polyfills'), paths.popupIndexJs],
+      settings: [require.resolve('./polyfills'), paths.appSettingsIndexJs],
+      processor: [paths.appProcessIndexJs],
     // We include the app code last so that if there is a runtime error during
     // initialization, it doesn't blow up the WebpackDevServer client, and
     // changing JS code would still trigger a refresh.
-  ],
+  },
   output: {
     // Add /* filename */ comments to generated require()s in the output.
-    pathinfo: true,
+    path: paths.appBuild,
     // This does not produce a real file. It's just the virtual path that is
     // served by WebpackDevServer in development. This is the JS bundle
     // containing code from all our entry points, and the Webpack runtime.
-    filename: 'static/js/bundle.js',
+    filename: '[name]/[name].js',
+    chunkFilename: '[name]/[name].js',
     // There are also additional JS chunk files if you use code splitting.
-    chunkFilename: 'static/js/[name].chunk.js',
+    // chunkFilename: 'static/js/[name].chunk.js',
     // This is the URL that app is served from. We use "/" in development.
     publicPath: publicPath,
     // Point sourcemap entries to original disk location (format as URL on Windows)
@@ -72,7 +77,7 @@ module.exports = {
     // We placed these paths second because we want `node_modules` to "win"
     // if there are any conflicts. This matches Node resolution mechanism.
     // https://github.com/facebookincubator/create-react-app/issues/253
-    modules: ['node_modules', paths.appNodeModules].concat(
+    modules: [path.resolve('./src'), 'node_modules', paths.appNodeModules].concat(
       // It is guaranteed to exist because we tweak it in `env.js`
       process.env.NODE_PATH.split(path.delimiter).filter(Boolean)
     ),
@@ -211,6 +216,20 @@ module.exports = {
     ],
   },
   plugins: [
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery',
+      'window.jQuery': 'jquery'
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      // filename: "vendor.js"
+      // (Give the chunk a different name)
+
+      minChunks: Infinity,
+      // (with more entries, this ensures that no other module
+      //  goes into the vendor chunk)
+    }),
     // Makes some environment variables available in index.html.
     // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
     // <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
@@ -219,7 +238,69 @@ module.exports = {
     // Generates an `index.html` file with the <script> injected.
     new HtmlWebpackPlugin({
       inject: true,
+      template: paths.appPopupHtml,
+      filename: 'popup/index.html',
+      chunks: ['vendor', 'popup'],
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeRedundantAttributes: true,
+        useShortDoctype: true,
+        removeEmptyAttributes: true,
+        removeStyleLinkTypeAttributes: true,
+        keepClosingSlash: true,
+        minifyJS: true,
+        minifyCSS: true,
+        minifyURLs: true,
+      },
+    }),
+    new HtmlWebpackPlugin({
+      inject: true,
       template: paths.appHtml,
+      filename: 'application/index.html',
+      chunks: ['vendor', 'application'],
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeRedundantAttributes: true,
+        useShortDoctype: true,
+        removeEmptyAttributes: true,
+        removeStyleLinkTypeAttributes: true,
+        keepClosingSlash: true,
+        minifyJS: true,
+        minifyCSS: true,
+        minifyURLs: true,
+      },
+    }),
+    new HtmlWebpackPlugin({
+      inject: true,
+      template: paths.appSettingsHtml,
+      filename: 'settings/index.html',
+      chunks: ['vendor', 'settings'],
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeRedundantAttributes: true,
+        useShortDoctype: true,
+        removeEmptyAttributes: true,
+        removeStyleLinkTypeAttributes: true,
+        keepClosingSlash: true,
+        minifyJS: true,
+        minifyCSS: true,
+        minifyURLs: true,
+      },
+    }),
+    // Makes some environment variables available to the JS code, for example:
+    // if (process.env.NODE_ENV === 'production') { ... }. See `./env.js`.
+    // It is absolutely essential that NODE_ENV was set to production here.
+    // Otherwise React will be compiled in the very slow development mode.
+    new webpack.DefinePlugin(env.stringified),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('development'),
+      __DEVELOPMENT__: true,
+      __DEVTOOLS__: true,
+      __USE_GA__: false,
+      __GA_ID__: null
     }),
     // Add module names to factory functions so they appear in browser profiler.
     new webpack.NamedModulesPlugin(),

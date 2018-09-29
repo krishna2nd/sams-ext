@@ -38,6 +38,7 @@
     "jest": "20.0.4",
     "jquery": "^3.3.1",
     "local-storage": "^1.4.2",
+    "lodash": "^4.17.10",
     "object-assign": "4.1.1",
     "onsenui": "^2.10.4",
     "owl.carousel": "^2.3.4",
@@ -62,6 +63,7 @@
     "redux-logger": "^3.0.6",
     "redux-saga": "^0.16.0",
     "redux-thunk": "^2.3.0",
+    "reselect": "^3.0.1",
     "resolve": "1.6.0",
     "style-loader": "0.19.0",
     "sw-precache-webpack-plugin": "0.11.4",
@@ -112,5 +114,8 @@
   },
   "eslintConfig": {
     "extends": "react-app"
+  },
+  "devDependencies": {
+    "redux-devtools-extension": "^2.13.5"
   }
 }

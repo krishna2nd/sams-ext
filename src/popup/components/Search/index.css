@@ -1,0 +1,6 @@
+.product-search {
+    display: block;
+}
+.product-search .search-input {
+    border-radius: 0px;
+}
